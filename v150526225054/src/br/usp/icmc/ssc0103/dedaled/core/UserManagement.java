@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import br.usp.icmc.ssc0103.dedaled.db.UserDatabase;
 import br.usp.icmc.ssc0103.dedaled.user.*;
+import br.usp.icmc.ssc0103.dedaled.user.exceptions.*;
 
 public class UserManagement {
 
@@ -29,6 +30,12 @@ public class UserManagement {
 
 	public void insertNewUser(User u) {
 		this.ud.insertUser(u);
+	}
+
+	public boolean userCanLend(Long userId) throws LimitReachedException {
+		User u = this.finder.findById(userId);
+		if(!u.isAtLimit()) return true;
+		else throw new LimitReachedException(u.getFullName());
 	}
 
 	public void lentLibraryEntity(Long userId, Long entityId) {

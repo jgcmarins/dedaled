@@ -14,6 +14,7 @@ import java.util.Date;
 
 import br.usp.icmc.ssc0103.dedaled.db.LibraryDatabase;
 import br.usp.icmc.ssc0103.dedaled.library.*;
+import br.usp.icmc.ssc0103.dedaled.library.exceptions.*;
 
 public class LibraryManagement {
 
@@ -30,6 +31,12 @@ public class LibraryManagement {
 
 	public void insertNewLibraryEntity(LibraryEntity le) {
 		this.ld.insertLibraryEntity(le);
+	}
+
+	public boolean entityIsAvailable(Long entityId) throws EntityNotAvailableException {
+		LibraryEntity le =  this.finder.findById(entityId);
+		if(le.isAvailable()) return true;
+		else throw new EntityNotAvailableException(le.getTitle());
 	}
 
 	public void lentLibraryEntity(Long entityId, Date lending, Date devolution, Long userId) {

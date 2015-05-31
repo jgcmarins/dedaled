@@ -27,16 +27,37 @@ public class SystemManagement {
 	}
 
 	public void run() {
-		this.lent();
+		this.lent(new Long(5L), new Long(1L));
+		this.lent(new Long(5L), new Long(5L));
+		this.lent(new Long(5L), new Long(2L));
+		this.lent(new Long(5L), new Long(6L));
+		this.lent(new Long(5L), new Long(3L));
+		this.lent(new Long(5L), new Long(7L));
+		this.lent(new Long(5L), new Long(4L));
+		this.lent(new Long(5L), new Long(8L));
+		this.lent(new Long(5L), new Long(2L));
+		this.lent(new Long(5L), new Long(6L));
 		this.lm.browser.browseAllLibraryEntities();
 		this.um.browser.browseAllUsers();
 	}
 
-	public void lent() {
+	public void lent(Long userId, Long entityId) {
 		Date lending = this.sd.getCurrent();
-		this.lm.lentLibraryEntity(new Long(3L), lending, new Date(lending.getTime() + User.PROFESSORPERIOD), new Long(5L));
-		this.um.lentLibraryEntity(new Long(5L), new Long(3L));
-		this.lm.lentLibraryEntity(new Long(9L), lending, new Date(lending.getTime() + User.PROFESSORPERIOD), new Long(5L));
-		this.um.lentLibraryEntity(new Long(5L), new Long(9L));
+
+		boolean isAvailable = false;
+		boolean canLend = false;
+
+		try {
+			isAvailable = this.lm.entityIsAvailable(entityId);
+		} catch(Exception e) { System.out.println(e.getMessage()); }
+
+		try {
+			canLend = this.um.userCanLend(userId);
+		} catch(Exception e) { System.out.println(e.getMessage()); }
+
+		if(isAvailable && canLend) {
+			this.lm.lentLibraryEntity(entityId, lending, new Date(lending.getTime() + User.PROFESSORPERIOD), userId);
+			this.um.lentLibraryEntity(userId, entityId);
+		}
 	}
 }
