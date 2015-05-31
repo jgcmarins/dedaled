@@ -1,0 +1,1 @@
+Main-Class: br.usp.icmc.ssc0103.dedaled.main.Main
