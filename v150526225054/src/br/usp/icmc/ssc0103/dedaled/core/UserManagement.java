@@ -30,4 +30,10 @@ public class UserManagement {
 	public void insertNewUser(User u) {
 		this.ud.insertUser(u);
 	}
+
+	public void lentLibraryEntity(Long userId, Long entityId) {
+		User u = this.finder.findById(userId);
+		u.getLendingList().add(entityId);
+		this.ud.updateUser(u);
+	}
 }

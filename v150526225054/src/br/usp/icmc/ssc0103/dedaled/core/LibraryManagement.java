@@ -10,6 +10,7 @@
 package br.usp.icmc.ssc0103.dedaled.core;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import br.usp.icmc.ssc0103.dedaled.db.LibraryDatabase;
 import br.usp.icmc.ssc0103.dedaled.library.*;
@@ -29,5 +30,14 @@ public class LibraryManagement {
 
 	public void insertNewLibraryEntity(LibraryEntity le) {
 		this.ld.insertLibraryEntity(le);
+	}
+
+	public void lentLibraryEntity(Long entityId, Date lending, Date devolution, Long userId) {
+		LibraryEntity le =  this.finder.findById(entityId);
+		le.setLending(lending);
+		le.setDevolution(devolution);
+		le.setLentTo(userId);
+		le.setLent(true);
+		this.ld.updateLibraryEntity(le);
 	}
 }

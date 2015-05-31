@@ -15,7 +15,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		SystemManagement sm = new SystemManagement();
+		SystemManagement sm = new SystemManagement(2015, 5, 31);
 		sm.run();
 	}
 }

@@ -27,9 +27,9 @@ public class User {
 	public static final String STUDENT = new String("STUDENT");
 	public static final String OTHER = new String("OTHER");
 
-	public static final Long PROFESSORPERIOD = new Long(5184000L);
-	public static final Long STUDENTPERIOD = new Long(1296000L);
-	public static final Long OTHERPERIOD = new Long(1296000L);
+	public static final Long PROFESSORPERIOD = new Long(5184000000L);
+	public static final Long STUDENTPERIOD = new Long(1296000000L);
+	public static final Long OTHERPERIOD = new Long(1296000000L);
 
 	public static final Integer PROFESSORLIMIT = new Integer(6);
 	public static final Integer STUDENTLIMIT = new Integer(4);
