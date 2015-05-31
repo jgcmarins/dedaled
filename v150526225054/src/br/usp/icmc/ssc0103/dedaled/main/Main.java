@@ -9,10 +9,7 @@
 
 package br.usp.icmc.ssc0103.dedaled.main;
 
-import java.util.ArrayList;
-
 import br.usp.icmc.ssc0103.dedaled.core.*;
-import br.usp.icmc.ssc0103.dedaled.user.*;
 
 public class Main {
 

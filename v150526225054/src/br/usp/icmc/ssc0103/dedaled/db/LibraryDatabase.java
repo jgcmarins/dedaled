@@ -35,7 +35,7 @@ public class LibraryDatabase {
 		this.file = new File(new String(this.directoryName+this.fileName));
 	}
 
-	public synchronized Long idGenerator() {
+	private synchronized Long idGenerator() {
 		try {
 
 			LineNumberReader lnr = new LineNumberReader(new FileReader(this.file));
@@ -63,13 +63,13 @@ public class LibraryDatabase {
 		return this.CSVListToLibraryEntityList(csvr.readAll());
 	}
 
-	public synchronized ArrayList<LibraryEntity> CSVListToLibraryEntityList(ArrayList<String> records) {
+	private synchronized ArrayList<LibraryEntity> CSVListToLibraryEntityList(ArrayList<String> records) {
 		ArrayList<LibraryEntity> entities = new ArrayList<LibraryEntity>();
 		for(String record : records) entities.add(this.CSVtoLibraryEntity(record));
 		return entities;
 	}
 
-	public synchronized LibraryEntity CSVtoLibraryEntity(String csv) {
+	private synchronized LibraryEntity CSVtoLibraryEntity(String csv) {
 		String[] values = csv.split(",");
 		LibraryEntity le = null;
 		if(values[1].equals(LibraryEntity.BOOK)) le = new Book(values);

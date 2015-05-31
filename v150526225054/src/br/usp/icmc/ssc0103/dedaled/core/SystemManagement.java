@@ -9,10 +9,6 @@
 
 package br.usp.icmc.ssc0103.dedaled.core;
 
-import java.util.ArrayList;
-
-import br.usp.icmc.ssc0103.dedaled.console.*;
-
 public class SystemManagement {
 
 	public LibraryManagement lm;
@@ -24,7 +20,7 @@ public class SystemManagement {
 	}
 
 	public void run() {
-		this.lm.browseAllLibraryEntities();
-		this.um.browseAllUsers();
+		this.lm.browser.browseAllLibraryEntities();
+		this.um.browser.browseAllUsers();
 	}
 }

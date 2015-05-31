@@ -35,7 +35,7 @@ public class UserDatabase {
 		this.file = new File(new String(this.directoryName+this.fileName));
 	}
 
-	public synchronized Long idGenerator() {
+	private synchronized Long idGenerator() {
 		try {
 
 			LineNumberReader lnr = new LineNumberReader(new FileReader(this.file));
@@ -63,13 +63,13 @@ public class UserDatabase {
 		return this.CSVListToUserList(csvr.readAll());
 	}
 
-	public synchronized ArrayList<User> CSVListToUserList(ArrayList<String> records) {
+	private synchronized ArrayList<User> CSVListToUserList(ArrayList<String> records) {
 		ArrayList<User> users = new ArrayList<User>();
 		for(String record : records) users.add(this.CSVtoUser(record));
 		return users;
 	}
 
-	public synchronized User CSVtoUser(String csv) {
+	private synchronized User CSVtoUser(String csv) {
 		String[] values = csv.split(",");
 		User u = null;
 		if(values[1].equals(User.PROFESSOR)) u = new Professor(values);
