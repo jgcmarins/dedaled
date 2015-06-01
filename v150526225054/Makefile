@@ -28,4 +28,4 @@ run201611:
 run15:
 	java -jar package/Dedaled.jar 2016 1 15
 run60:
-	java -jar package/Dedaled.jar 2016 3 1
+	java -jar package/Dedaled.jar 2016 3 2

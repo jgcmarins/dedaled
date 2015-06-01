@@ -29,11 +29,10 @@ public class SystemManagement {
 
 	public void start() {
 		this.lm.updateLending();
+		this.um.updatePenalties(this.lm.finder.findAllLate());
 		this.run();
-		try {
-			User u = this.um.finder.findUserByEntityId(new Long(9L));
-			this.um.browser.browseById(u.getId());
-		} catch(Exception e) { System.out.println(e.getMessage()); }
+		this.lm.browser.browseAllLate();
+		this.um.browser.browseAllPenalized();
 	}
 
 	public void run() {

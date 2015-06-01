@@ -30,6 +30,7 @@ public class User {
 	public static final Long PROFESSORPERIOD = new Long(5184000000L);
 	public static final Long STUDENTPERIOD = new Long(1296000000L);
 	public static final Long OTHERPERIOD = new Long(1296000000L);
+	public static final Long DAY = new Long(86400000L);
 
 	public static final Integer PROFESSORLIMIT = new Integer(6);
 	public static final Integer STUDENTLIMIT = new Integer(4);
@@ -120,5 +121,11 @@ public class User {
 	public boolean hasEntity(Long entityId) {
 		return this.lendingList.stream()
 					.anyMatch(id -> id.equals(entityId));
+	}
+
+	public void computePenalty(long current, long devolution) {
+		long diff = current - devolution;
+		int penalty = (int)(diff/(User.DAY.longValue()));
+		if(penalty > this.getPenalty().intValue()) this.setPenalty(new Integer(penalty));
 	}
 }

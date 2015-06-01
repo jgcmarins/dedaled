@@ -10,10 +10,12 @@
 package br.usp.icmc.ssc0103.dedaled.core;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import br.usp.icmc.ssc0103.dedaled.db.UserDatabase;
 import br.usp.icmc.ssc0103.dedaled.user.*;
 import br.usp.icmc.ssc0103.dedaled.user.exceptions.*;
+import br.usp.icmc.ssc0103.dedaled.library.*;
 
 public class UserFinder {
 
@@ -44,5 +46,17 @@ public class UserFinder {
 		User u = this.ud.selectUserByEntityId(entityId);
 		if(u == null) throw new UserNotFound();
 		else return u;
+	}
+
+	public Hashtable<User, LibraryEntity> findAllLate(ArrayList<LibraryEntity> entities) throws UserNotFound {
+		Hashtable<User, LibraryEntity> users = new Hashtable<User, LibraryEntity>();
+		entities.stream()
+				.forEach(entity -> {
+					try {
+						users.put(this.findUserByEntityId(entity.getId()), entity);
+					} catch(Exception e) {}
+				});
+		if(users.size() > 0) return users;
+		else throw new UserNotFound();
 	}
 }

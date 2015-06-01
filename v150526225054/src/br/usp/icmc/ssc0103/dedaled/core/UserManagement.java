@@ -10,11 +10,13 @@
 package br.usp.icmc.ssc0103.dedaled.core;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import br.usp.icmc.ssc0103.dedaled.db.UserDatabase;
 import br.usp.icmc.ssc0103.dedaled.user.*;
 import br.usp.icmc.ssc0103.dedaled.user.exceptions.*;
 import br.usp.icmc.ssc0103.dedaled.date.*;
+import br.usp.icmc.ssc0103.dedaled.library.*;
 
 public class UserManagement {
 
@@ -51,5 +53,17 @@ public class UserManagement {
 			u.getLendingList().add(entityId);
 			this.ud.updateUser(u);
 		} else throw new UserNotFound();
+	}
+
+	public void updatePenalties(ArrayList<LibraryEntity> entities) {
+		try {
+			Hashtable<User, LibraryEntity> users = this.finder.findAllLate(entities);
+			users.keySet().stream()
+				.forEach(user -> {
+					LibraryEntity entity = users.get(user);
+					user.computePenalty(this.sd.getCurrent().getTime(), entity.getDevolution().getTime());
+					this.ud.updateUser(user);
+				});
+		} catch(Exception e) {}
 	}
 }
