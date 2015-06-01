@@ -151,4 +151,15 @@ public class UserDatabase {
 							.collect(Collectors.toList())
 				);
 	}
+
+	public synchronized User selectUserByEntityId(Long entityId) {
+		ArrayList<User> users = this.selectAll();
+		try {
+			User u = users.stream()
+					.filter(user -> user.hasEntity(entityId))
+					.findFirst()
+					.get();
+			return u;
+		} catch(NoSuchElementException nsee) { return null; }
+	}
 }

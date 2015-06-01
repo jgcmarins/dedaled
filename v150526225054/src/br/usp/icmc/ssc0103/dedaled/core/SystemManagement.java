@@ -13,6 +13,7 @@ import java.util.Date;
 
 import br.usp.icmc.ssc0103.dedaled.date.*;
 import br.usp.icmc.ssc0103.dedaled.user.*;
+import br.usp.icmc.ssc0103.dedaled.library.*;
 
 public class SystemManagement {
 
@@ -21,43 +22,58 @@ public class SystemManagement {
 	public SystemDate sd;
 
 	public SystemManagement(int year, int month, int day) {
-		this.lm = new LibraryManagement();
-		this.um = new UserManagement();
 		this.sd = new SystemDate(year, month, day);
+		this.lm = new LibraryManagement(this.sd);
+		this.um = new UserManagement(this.sd);
+	}
+
+	public void start() {
+		this.lm.updateLending();
+		this.run();
+		try {
+			User u = this.um.finder.findUserByEntityId(new Long(9L));
+			this.um.browser.browseById(u.getId());
+		} catch(Exception e) { System.out.println(e.getMessage()); }
 	}
 
 	public void run() {
-		this.lent(new Long(5L), new Long(1L));
-		this.lent(new Long(5L), new Long(5L));
-		this.lent(new Long(5L), new Long(2L));
-		this.lent(new Long(5L), new Long(6L));
-		this.lent(new Long(5L), new Long(3L));
-		this.lent(new Long(5L), new Long(7L));
-		this.lent(new Long(5L), new Long(4L));
-		this.lent(new Long(5L), new Long(8L));
-		this.lent(new Long(5L), new Long(2L));
-		this.lent(new Long(5L), new Long(6L));
 		this.lm.browser.browseAllLibraryEntities();
 		this.um.browser.browseAllUsers();
 	}
 
-	public void lent(Long userId, Long entityId) {
-		Date lending = this.sd.getCurrent();
-
-		boolean isAvailable = false;
-		boolean canLend = false;
-
+	public void lend(Long userId, Long entityId) {
 		try {
-			isAvailable = this.lm.entityIsAvailable(entityId);
-		} catch(Exception e) { System.out.println(e.getMessage()); }
+			if(this.lm.entityIsAvailable(entityId)) {
+				try {
+					if(this.um.userCanLend(userId)) {
+						try {
+							User user = this.um.finder.findById(userId);
 
-		try {
-			canLend = this.um.userCanLend(userId);
-		} catch(Exception e) { System.out.println(e.getMessage()); }
+							Date lending = this.sd.getCurrent();
+							Date devolution = new Date(lending.getTime() + user.getLendingPeriod().longValue());
 
-		if(isAvailable && canLend) {
-			this.lm.lentLibraryEntity(entityId, lending, new Date(lending.getTime() + User.PROFESSORPERIOD), userId);
-			this.um.lentLibraryEntity(userId, entityId);
-		}
+							this.lm.lentLibraryEntity(entityId, lending, devolution, userId);
+							this.um.lentLibraryEntity(userId, entityId);
+						} catch(Exception e) { System.out.println(e.getMessage()); }
+					}
+				} catch(Exception e) { System.out.println(e.getMessage()); }
+			}
+		} catch(Exception e) { System.out.println(e.getMessage()); }
 	}
+
+	public void lend(String email, String title) {
+		User u = null;
+		LibraryEntity le = null;
+
+		try {
+			u = this.um.finder.findByEmail(email);
+			try {
+				le = this.lm.finder.findFirstAvailableByTitle(title);
+				this.lend(u.getId(), le.getId());
+			} catch(Exception e) { System.out.println(e.getMessage()); }
+
+		} catch(Exception e) { System.out.println(e.getMessage()); }
+	}
+
+
 }

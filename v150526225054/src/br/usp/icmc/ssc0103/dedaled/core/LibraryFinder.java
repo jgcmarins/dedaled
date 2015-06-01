@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import br.usp.icmc.ssc0103.dedaled.db.LibraryDatabase;
 import br.usp.icmc.ssc0103.dedaled.library.*;
+import br.usp.icmc.ssc0103.dedaled.library.exceptions.*;
 
 public class LibraryFinder {
 
@@ -22,9 +23,10 @@ public class LibraryFinder {
 		this.ld = ld;
 	}
 
-	public LibraryEntity findById(Long id) {
+	public LibraryEntity findById(Long id) throws EntityNotFound {
 		LibraryEntity le = this.ld.selectById(id);
-		return le;
+		if(le == null) throw new EntityNotFound();
+		else return le;
 	}
 
 	public ArrayList<LibraryEntity> findByTitle(String title) {
@@ -45,5 +47,10 @@ public class LibraryFinder {
 	public ArrayList<LibraryEntity> findAllLate() {
 		ArrayList<LibraryEntity> entities = this.ld.selectAllLate();
 		return entities;
+	}
+
+	public LibraryEntity findFirstAvailableByTitle(String title) {
+		LibraryEntity le = this.ld.selectFirstAvailableByTitle(title);
+		return le;
 	}
 }

@@ -167,4 +167,16 @@ public class LibraryDatabase {
 							.collect(Collectors.toList())
 				);
 	}
+
+	public synchronized	LibraryEntity selectFirstAvailableByTitle(String title) {
+		ArrayList<LibraryEntity> entities = this.selectAll();
+		try {
+			LibraryEntity le = entities.stream()
+					.filter(entity -> entity.getTitle().equals(title))
+					.filter(entity -> entity.isAvailable())
+					.findFirst()
+					.get();
+			return le;
+		} catch(NoSuchElementException nsee) { return null; }
+	}
 }

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import br.usp.icmc.ssc0103.dedaled.db.UserDatabase;
 import br.usp.icmc.ssc0103.dedaled.user.*;
+import br.usp.icmc.ssc0103.dedaled.user.exceptions.*;
 
 public class UserFinder {
 
@@ -22,18 +23,26 @@ public class UserFinder {
 		this.ud = ud;
 	}
 
-	public User findById(Long id) {
+	public User findById(Long id) throws UserNotFound {
 		User u = this.ud.selectById(id);
-		return u;
+		if(u == null) throw new UserNotFound();
+		else return u;
 	}
 
-	public User findByEmail(String email) {
+	public User findByEmail(String email) throws UserNotFound {
 		User u = this.ud.selectByEmail(email);
+		if(u == null) throw new UserNotFound();
 		return u;
 	}
 
 	public ArrayList<User> findAllPenalized() {
 		ArrayList<User> users = this.ud.selectAllPenalized();
 		return users;
+	}
+
+	public User findUserByEntityId(Long entityId) throws UserNotFound {
+		User u = this.ud.selectUserByEntityId(entityId);
+		if(u == null) throw new UserNotFound();
+		else return u;
 	}
 }

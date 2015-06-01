@@ -93,4 +93,10 @@ public abstract class LibraryEntity {
 	public abstract String toCSV();
 
 	public boolean isAvailable() { return !this.lent; }
+
+	public boolean isLate(long current) {
+		//System.out.println("Current: "+current+"\nDevolution: "+this.devolution.getTime());
+		if(this.devolution.getTime() < current) return true;
+		else return false;
+	}
 }

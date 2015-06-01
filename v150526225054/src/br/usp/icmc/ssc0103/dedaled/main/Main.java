@@ -15,7 +15,12 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		SystemManagement sm = new SystemManagement(2015, 5, 31);
-		sm.run();
+		if(args.length != 3) {
+			System.out.println("Usage: Dedaled.jar year month day");
+			System.exit(1);
+		}
+
+		SystemManagement sm = new SystemManagement(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+		sm.start();
 	}
 }

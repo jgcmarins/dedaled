@@ -20,11 +20,15 @@ public class Student extends User {
 	}
 
 	public Student(Long id, String type, String email, String password, String fullName,
-				Long lendingPeriod, Integer lendingLimit, Integer penalty, ArrayList<Long> lendingList) {
-		super(id, type, email, password, fullName, lendingPeriod, lendingLimit, penalty, lendingList);
+					Integer penalty, ArrayList<Long> lendingList) {
+		super(id, type, email, password, fullName, penalty, lendingList);
+		this.setLendingPeriod(User.STUDENTPERIOD);
+		this.setLendingLimit(User.STUDENTLIMIT);
 	}
 
 	public Student(String[] csv) {
 		super(csv);
+		this.setLendingPeriod(User.STUDENTPERIOD);
+		this.setLendingLimit(User.STUDENTLIMIT);
 	}
 }

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import br.usp.icmc.ssc0103.dedaled.db.UserDatabase;
 import br.usp.icmc.ssc0103.dedaled.user.*;
 import br.usp.icmc.ssc0103.dedaled.user.exceptions.*;
+import br.usp.icmc.ssc0103.dedaled.date.*;
 
 public class UserManagement {
 
@@ -22,25 +23,33 @@ public class UserManagement {
 	public UserBrowser browser;
 	public UserFinder finder;
 
-	public UserManagement() {
+	private SystemDate sd;
+
+	public UserManagement(SystemDate sd) {
 		this.ud = new UserDatabase();
 		this.browser = new UserBrowser(this.ud);
 		this.finder = new UserFinder(this.ud);
+		this.sd = sd;
 	}
 
-	public void insertNewUser(User u) {
-		this.ud.insertUser(u);
+	public void insertNewUser(User u) throws UserAlreadyExists {
+		try {
+			User user = this.finder.findById(u.getId());
+		} catch (UserNotFound unf) { this.ud.insertUser(u); }
 	}
 
-	public boolean userCanLend(Long userId) throws LimitReachedException {
+	public boolean userCanLend(Long userId) throws LimitReached, UserNotFound {
 		User u = this.finder.findById(userId);
 		if(!u.isAtLimit()) return true;
-		else throw new LimitReachedException(u.getFullName());
+		else if(u == null) throw new UserNotFound();
+		else throw new LimitReached(u.getFullName());
 	}
 
-	public void lentLibraryEntity(Long userId, Long entityId) {
+	public void lentLibraryEntity(Long userId, Long entityId) throws UserNotFound {
 		User u = this.finder.findById(userId);
-		u.getLendingList().add(entityId);
-		this.ud.updateUser(u);
+		if(u != null) {
+			u.getLendingList().add(entityId);
+			this.ud.updateUser(u);
+		} else throw new UserNotFound();
 	}
 }

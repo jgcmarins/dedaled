@@ -11,10 +11,12 @@ package br.usp.icmc.ssc0103.dedaled.core;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import br.usp.icmc.ssc0103.dedaled.db.LibraryDatabase;
 import br.usp.icmc.ssc0103.dedaled.library.*;
 import br.usp.icmc.ssc0103.dedaled.library.exceptions.*;
+import br.usp.icmc.ssc0103.dedaled.date.*;
 
 public class LibraryManagement {
 
@@ -23,28 +25,45 @@ public class LibraryManagement {
 	public LibraryBrowser browser;
 	public LibraryFinder finder;
 
-	public LibraryManagement() {
+	private SystemDate sd;
+
+	public LibraryManagement(SystemDate sd) {
 		this.ld = new LibraryDatabase();
 		this.browser = new LibraryBrowser(this.ld);
 		this.finder = new LibraryFinder(this.ld);
+		this.sd = sd;
 	}
 
 	public void insertNewLibraryEntity(LibraryEntity le) {
 		this.ld.insertLibraryEntity(le);
 	}
 
-	public boolean entityIsAvailable(Long entityId) throws EntityNotAvailableException {
+	public boolean entityIsAvailable(Long entityId) throws EntityNotAvailable, EntityNotFound {
 		LibraryEntity le =  this.finder.findById(entityId);
 		if(le.isAvailable()) return true;
-		else throw new EntityNotAvailableException(le.getTitle());
+		else throw new EntityNotAvailable(le.getTitle());
 	}
 
-	public void lentLibraryEntity(Long entityId, Date lending, Date devolution, Long userId) {
+	public void lentLibraryEntity(Long entityId, Date lending, Date devolution, Long userId) throws EntityNotFound {
 		LibraryEntity le =  this.finder.findById(entityId);
-		le.setLending(lending);
-		le.setDevolution(devolution);
-		le.setLentTo(userId);
-		le.setLent(true);
-		this.ld.updateLibraryEntity(le);
+		if(le != null) {
+			le.setLending(lending);
+			le.setDevolution(devolution);
+			le.setLentTo(userId);
+			le.setLent(true);
+			this.ld.updateLibraryEntity(le);
+		} else throw new EntityNotFound();
+	}
+
+	public void updateLending() {
+		ArrayList<LibraryEntity> entities = this.finder.findAllLent();
+		ArrayList<LibraryEntity> late =	new ArrayList<LibraryEntity>(entities.stream()
+										.filter(entity -> entity.isLate(this.sd.getCurrent().getTime()))
+										.filter(entity -> !entity.getLate())
+										.collect(Collectors.toList()));
+		for(LibraryEntity entity : late) {
+			entity.setLate(true);
+			this.ld.updateLibraryEntity(entity);
+		}
 	}
 }

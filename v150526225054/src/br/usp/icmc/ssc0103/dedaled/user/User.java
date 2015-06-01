@@ -53,14 +53,14 @@ public class User {
 	}
 
 	public User(Long id, String type, String email, String password, String fullName,
-				Long lendingPeriod, Integer lendingLimit, Integer penalty, ArrayList<Long> lendingList) {
+				Integer penalty, ArrayList<Long> lendingList) {
 		this.id = id;
 		this.type = type;
 		this.email = email;
 		this.password = password;
 		this.fullName = fullName;
-		this.lendingPeriod = lendingPeriod;
-		this.lendingLimit = lendingLimit;
+		this.lendingPeriod = User.NOPERIOD;
+		this.lendingLimit = User.NOLIMIT;
 		this.penalty = penalty;
 		this.lendingList = lendingList;
 	}
@@ -72,8 +72,8 @@ public class User {
 		this.email = new String(csv[i++]);
 		this.password = new String(csv[i++]);
 		this.fullName = new String(csv[i++]);
-		this.lendingPeriod = new Long(Long.parseLong(csv[i++]));
-		this.lendingLimit = new Integer(Integer.parseInt(csv[i++]));
+		this.lendingPeriod = User.NOPERIOD;
+		this.lendingLimit = User.NOLIMIT;
 		this.penalty = new Integer(Integer.parseInt(csv[i++]));
 		this.lendingList = new ArrayList<Long>();
 		while(i < csv.length) this.lendingList.add(new Long(Long.parseLong(csv[i++])));
@@ -101,8 +101,7 @@ public class User {
 	public String toCSV() {
 		String list = lendingListToCSV();
 		return this.id.toString()+","+this.type+","+this.email+","+this.password
-				+","+this.fullName+","+this.lendingPeriod.toString()+","+this.lendingLimit.toString()
-				+","+this.penalty.toString()+","+list;
+				+","+this.fullName+","+this.penalty.toString()+","+list;
 	}
 
 	public String lendingListToCSV() {
@@ -117,4 +116,9 @@ public class User {
 	public boolean isPenalized() { return !(this.penalty.equals(User.NOPENALTY)); }
 
 	public boolean isAtLimit() { return (this.lendingList.size() == this.lendingLimit); }
+
+	public boolean hasEntity(Long entityId) {
+		return this.lendingList.stream()
+					.anyMatch(id -> id.equals(entityId));
+	}
 }
