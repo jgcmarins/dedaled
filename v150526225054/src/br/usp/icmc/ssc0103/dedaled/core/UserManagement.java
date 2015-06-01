@@ -42,9 +42,13 @@ public class UserManagement {
 
 	public boolean userCanLend(Long userId) throws LimitReached, UserNotFound {
 		User u = this.finder.findById(userId);
-		if(!u.isAtLimit()) return true;
-		else if(u == null) throw new UserNotFound();
-		else throw new LimitReached(u.getFullName());
+		if(u == null) throw new UserNotFound();
+		else  {
+			if(!u.isAtLimit()) {
+				if(!u.isPenalized()) throw new LimitReached(u.getFullName()); // TODO UserIsPenalizedException()
+				else return true;
+			} else throw new LimitReached(u.getFullName());
+		}
 	}
 
 	public void lentLibraryEntity(Long userId, Long entityId) throws UserNotFound {
@@ -56,12 +60,29 @@ public class UserManagement {
 	}
 
 	public void updatePenalties(ArrayList<LibraryEntity> entities) {
+		this.penalize(entities);
+		this.undoPenalties(entities);
+	}
+
+	public void penalize(ArrayList<LibraryEntity> entities) {
 		try {
 			Hashtable<User, LibraryEntity> users = this.finder.findAllLate(entities);
 			users.keySet().stream()
 				.forEach(user -> {
 					LibraryEntity entity = users.get(user);
 					user.computePenalty(this.sd.getCurrent().getTime(), entity.getDevolution().getTime());
+					this.ud.updateUser(user);
+				});
+		} catch(Exception e) {}
+	}
+
+	public void undoPenalties(ArrayList<LibraryEntity> entities) {
+		try {
+			Hashtable<User, LibraryEntity> users = this.finder.findAllLate(entities);
+			users.keySet().stream()
+				.forEach(user -> {
+					LibraryEntity entity = users.get(user);
+					user.undoPenalty(this.sd.getCurrent().getTime(), entity.getId());
 					this.ud.updateUser(user);
 				});
 		} catch(Exception e) {}

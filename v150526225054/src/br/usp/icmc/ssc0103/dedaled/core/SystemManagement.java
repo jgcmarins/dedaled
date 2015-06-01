@@ -31,13 +31,14 @@ public class SystemManagement {
 		this.lm.updateLending();
 		this.um.updatePenalties(this.lm.finder.findAllLate());
 		this.run();
-		this.lm.browser.browseAllLate();
-		this.um.browser.browseAllPenalized();
 	}
 
 	public void run() {
+		//this.lend(new Long(1L), new Long(1L));
 		this.lm.browser.browseAllLibraryEntities();
 		this.um.browser.browseAllUsers();
+		this.lm.browser.browseAllLate();
+		this.um.browser.browseAllPenalized();
 	}
 
 	public void lend(Long userId, Long entityId) {

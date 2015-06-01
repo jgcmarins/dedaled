@@ -26,6 +26,6 @@ cleanfiles:
 run201611:
 	java -jar package/Dedaled.jar 2016 1 1
 run15:
-	java -jar package/Dedaled.jar 2016 1 15
+	java -jar package/Dedaled.jar 2016 1 16
 run60:
 	java -jar package/Dedaled.jar 2016 3 2

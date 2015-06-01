@@ -147,7 +147,7 @@ public class UserDatabase {
 		ArrayList<User> users = this.selectAll();
 		return new ArrayList<User>(
 					users.stream()
-							.filter(user -> user.isPenalized())
+							.filter(user -> !user.isPenalized())
 							.collect(Collectors.toList())
 				);
 	}

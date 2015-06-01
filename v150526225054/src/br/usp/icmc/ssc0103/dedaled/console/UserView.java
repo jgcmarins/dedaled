@@ -24,7 +24,8 @@ public class UserView {
 	private final String TYPE = new String("   Type   ");
 	private final String EMAIL = new String("   e-mail   ");
 	private final String FULLNAME = new String("   Full name   ");
-	private final String PENALTY = new String("   Penalty days   ");
+	private final String PENALTY = new String("   Penalty until   ");
+	private final String PENALTYDAYS = new String("   Penalty days   ");
 	private final String LENTLIST = new String("   Lent list   ");
 
 	public UserView(ArrayList<User> users) {
@@ -41,6 +42,7 @@ public class UserView {
 		this.columnsNames.add(EMAIL);
 		this.columnsNames.add(FULLNAME);
 		this.columnsNames.add(PENALTY);
+		this.columnsNames.add(PENALTYDAYS);
 		this.columnsNames.add(LENTLIST);
 	}
 
@@ -55,6 +57,7 @@ public class UserView {
 		strings.add(user.getEmail());
 		strings.add(user.getFullName());
 		strings.add(user.getPenalty().toString());
+		strings.add(user.getPenaltyDays().toString());
 		strings.add(user.lendingListToCSV());
 		return strings;
 	}

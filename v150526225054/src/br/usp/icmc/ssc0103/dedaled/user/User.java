@@ -10,6 +10,7 @@
 package br.usp.icmc.ssc0103.dedaled.user;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class User {
 
@@ -20,7 +21,8 @@ public class User {
 	private String fullName;
 	private Long lendingPeriod;
 	private Integer lendingLimit;
-	private Integer penalty;
+	private Date penalty;
+	private Integer penaltyDays;
 	private ArrayList<Long> lendingList;
 
 	public static final String PROFESSOR = new String("PROFESSOR");
@@ -41,7 +43,7 @@ public class User {
 	public static final Integer NOLIMIT = new Integer(0);
 	public static final Integer NOPENALTY = new Integer(0);
 
-	public User(String type, String email, String password, String fullName) {
+	public User(String type, String email, String password, String fullName, long current) {
 		this.id = User.NOID;
 		this.type = type;
 		this.email = email;
@@ -49,12 +51,13 @@ public class User {
 		this.fullName = fullName;
 		this.lendingPeriod = User.NOPERIOD;
 		this.lendingLimit = User.NOLIMIT;
-		this.penalty = User.NOPENALTY;
+		this.penalty = new Date(current);
+		this.penaltyDays = User.NOPENALTY;
 		this.lendingList = new ArrayList<Long>();
 	}
 
 	public User(Long id, String type, String email, String password, String fullName,
-				Integer penalty, ArrayList<Long> lendingList) {
+				Date penalty, Integer penaltyDays, ArrayList<Long> lendingList) {
 		this.id = id;
 		this.type = type;
 		this.email = email;
@@ -63,6 +66,7 @@ public class User {
 		this.lendingPeriod = User.NOPERIOD;
 		this.lendingLimit = User.NOLIMIT;
 		this.penalty = penalty;
+		this.penaltyDays = penaltyDays;
 		this.lendingList = lendingList;
 	}
 
@@ -75,7 +79,8 @@ public class User {
 		this.fullName = new String(csv[i++]);
 		this.lendingPeriod = User.NOPERIOD;
 		this.lendingLimit = User.NOLIMIT;
-		this.penalty = new Integer(Integer.parseInt(csv[i++]));
+		this.penalty = new Date(Long.parseLong(csv[i++]));
+		this.penaltyDays = new Integer(Integer.parseInt(csv[i++]));
 		this.lendingList = new ArrayList<Long>();
 		while(i < csv.length) this.lendingList.add(new Long(Long.parseLong(csv[i++])));
 	}
@@ -87,7 +92,8 @@ public class User {
 	public void setFullName(String fullName) { this.fullName = fullName; }
 	public void setLendingPeriod(Long lendingPeriod) { this.lendingPeriod = lendingPeriod; }
 	public void setLendingLimit(Integer lendingLimit) { this.lendingLimit = lendingLimit; }
-	public void setPenalty(Integer penalty) { this.penalty = penalty; }
+	public void setPenalty(Date penalty) { this.penalty = penalty; }
+	public void setPenaltyDays(Integer penaltyDays) { this.penaltyDays = penaltyDays; }
 
 	public Long getId() { return this.id; }
 	public String getType() { return this.type; }
@@ -96,13 +102,15 @@ public class User {
 	public String getFullName() { return this.fullName; }
 	public Long getLendingPeriod() { return this.lendingPeriod; }
 	public Integer getLendingLimit() { return this.lendingLimit; }
-	public Integer getPenalty() { return this.penalty; }
+	public Date getPenalty() { return this.penalty; }
+	public Integer getPenaltyDays() { return this.penaltyDays; }
 	public ArrayList<Long> getLendingList() { return this.lendingList; }
 
 	public String toCSV() {
 		String list = lendingListToCSV();
 		return this.id.toString()+","+this.type+","+this.email+","+this.password
-				+","+this.fullName+","+this.penalty.toString()+","+list;
+				+","+this.fullName+","+this.penalty.getTime()+","+
+				this.penaltyDays.toString()+","+list;
 	}
 
 	public String lendingListToCSV() {
@@ -114,7 +122,7 @@ public class User {
 		return list;
 	}
 
-	public boolean isPenalized() { return !(this.penalty.equals(User.NOPENALTY)); }
+	public boolean isPenalized() { return this.penaltyDays.equals(User.NOPENALTY); }
 
 	public boolean isAtLimit() { return (this.lendingList.size() == this.lendingLimit); }
 
@@ -126,6 +134,18 @@ public class User {
 	public void computePenalty(long current, long devolution) {
 		long diff = current - devolution;
 		int penalty = (int)(diff/(User.DAY.longValue()));
-		if(penalty > this.getPenalty().intValue()) this.setPenalty(new Integer(penalty));
+		penalty++;
+
+		if(penalty > this.getPenaltyDays().intValue()) {
+			this.setPenalty(new Date(current+diff));
+			this.setPenaltyDays(new Integer(penalty));
+		}
+	}
+
+	public void undoPenalty(long current, Long entityId) {
+		if((this.getPenalty().getTime() < current) && !hasEntity(entityId)) {
+			this.setPenalty(new Date(current));
+			this.setPenaltyDays(User.NOPENALTY);
+		}
 	}
 }

@@ -10,18 +10,19 @@
 package br.usp.icmc.ssc0103.dedaled.user;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Professor extends User {
 
-	public Professor(String email, String password, String fullName) {
-		super(User.PROFESSOR, email, password, fullName);
+	public Professor(String email, String password, String fullName, long current) {
+		super(User.PROFESSOR, email, password, fullName, current);
 		this.setLendingPeriod(User.PROFESSORPERIOD);
 		this.setLendingLimit(User.PROFESSORLIMIT);
 	}
 
 	public Professor(Long id, String type, String email, String password, String fullName,
-					Integer penalty, ArrayList<Long> lendingList) {
-		super(id, type, email, password, fullName, penalty, lendingList);
+					Date penalty, Integer penaltyDays, ArrayList<Long> lendingList) {
+		super(id, type, email, password, fullName, penalty, penaltyDays, lendingList);
 		this.setLendingPeriod(User.PROFESSORPERIOD);
 		this.setLendingLimit(User.PROFESSORLIMIT);
 	}
