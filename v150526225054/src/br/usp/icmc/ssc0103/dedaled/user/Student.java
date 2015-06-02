@@ -20,6 +20,12 @@ public class Student extends User {
 		this.setLendingLimit(User.STUDENTLIMIT);
 	}
 
+	public Student(Long id, String email, String password, String fullName, long current) {
+		super(id, User.STUDENT, email, password, fullName, current);
+		this.setLendingPeriod(User.STUDENTPERIOD);
+		this.setLendingLimit(User.STUDENTLIMIT);
+	}
+
 	public Student(Long id, String type, String email, String password, String fullName,
 					Date penalty, Integer penaltyDays, ArrayList<Long> lendingList) {
 		super(id, type, email, password, fullName, penalty, penaltyDays, lendingList);

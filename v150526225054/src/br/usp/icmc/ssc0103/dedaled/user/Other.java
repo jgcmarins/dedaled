@@ -20,6 +20,12 @@ public class Other extends User {
 		this.setLendingLimit(User.OTHERLIMIT);
 	}
 
+	public Other(Long id, String email, String password, String fullName, long current) {
+		super(id, User.OTHER, email, password, fullName, current);
+		this.setLendingPeriod(User.OTHERPERIOD);
+		this.setLendingLimit(User.OTHERLIMIT);
+	}
+
 	public Other(Long id, String type, String email, String password, String fullName,
 				Date penalty, Integer penaltyDays, ArrayList<Long> lendingList) {
 		super(id, type, email, password, fullName, penalty, penaltyDays, lendingList);

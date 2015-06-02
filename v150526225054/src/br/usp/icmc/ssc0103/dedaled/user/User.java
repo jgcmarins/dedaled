@@ -56,6 +56,19 @@ public class User {
 		this.lendingList = new ArrayList<Long>();
 	}
 
+	public User(Long id, String type, String email, String password, String fullName, long current) {
+		this.id = id;
+		this.type = type;
+		this.email = email;
+		this.password = password;
+		this.fullName = fullName;
+		this.lendingPeriod = User.NOPERIOD;
+		this.lendingLimit = User.NOLIMIT;
+		this.penalty = new Date(current);
+		this.penaltyDays = User.NOPENALTY;
+		this.lendingList = new ArrayList<Long>();
+	}
+
 	public User(Long id, String type, String email, String password, String fullName,
 				Date penalty, Integer penaltyDays, ArrayList<Long> lendingList) {
 		this.id = id;
@@ -142,10 +155,11 @@ public class User {
 		}
 	}
 
-	public void undoPenalty(long current, Long entityId) {
-		if((this.getPenalty().getTime() < current) && !hasEntity(entityId)) {
+	public boolean undoPenalty(long current) {
+		if((this.getPenalty().getTime() < current)) {
 			this.setPenalty(new Date(current));
 			this.setPenaltyDays(User.NOPENALTY);
-		}
+			return true;
+		} else return false;
 	}
 }

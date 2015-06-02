@@ -1,12 +1,10 @@
-1,BOOK,Into the Wild,Jon Krakauer,1451680533795,1452976533795,-1,false,false,000-isbn-000-1
-2,MAGAZINE,Forbes,Forbes Inc,1432856393326,1432856393326,-1,false,false
-3,BOOK,The Lord of the Rings,J. R. R. Tolkien,1451691339727,1452987339727,1,true,false,000-isbn-000-2
-4,ARTICLE,On the translation of languages from left to right,Kuth D. E.,1432856393326,1432856393326,-1,false,false
-5,BOOK,Nightfall,Isaac Asimov,1432856393326,1432856393326,-1,false,false,000-isbn-000-3
-6,MAGAZINE,Playboy,Playboy Enterprises,1432856393327,1432856393327,-1,false,false
-7,BOOK,Introduction to Algorithms,Thomas H. Cormen,1432856393327,1432856393327,-1,false,false,000-isbn-000-4
-8,ARTICLE,First Draft of a Report on the EDVAC,John von Neumann,1432856393327,1432856393327,-1,false,false
-9,BOOK,Design Patterns,Erich Gamma,1432856393327,1432856393327,-1,false,false,000-isbn-000-5
-10,MAGAZINE,Science,American Association for the Advancement of Science (AAAS),1432856393327,1432856393327,-1,false,false
-11,BOOK,Primeiro,Livro,1433203181306,1433203181306,-1,false,false,Inserido
-12,BOOK,Segundo Livro Inserido,Joao,1433203380955,1433203380955,-1,false,false,12345-isbn-7890
+1,BOOK,Into the Wild,Jon Krakauer,1433213591739,1433213591739,-1,false,false,000-isbn-000-1
+2,MAGAZINE,Forbes,Forbes Inc,1433213591742,1433213591742,-1,false,false
+3,BOOK,The Lord of the Rings,J. R. R. Tolkien,1433213591745,1433213591745,-1,false,false,000-isbn-000-2
+4,ARTICLE,On the translation of languages from left to right,Kuth D. E.,1433213591748,1433213591748,-1,false,false
+5,BOOK,Nightfall,Isaac Asimov,1433213591750,1433213591750,-1,false,false,000-isbn-000-3
+6,MAGAZINE,Playboy,Playboy Enterprises,1433213591752,1433213591752,-1,false,false
+7,BOOK,Introduction to Algorithms,Thomas H. Cormen,1433213591754,1433213591754,-1,false,false,000-isbn-000-4
+8,ARTICLE,First Draft of a Report on the EDVAC,John von Neumann,1433213591756,1433213591756,-1,false,false
+9,BOOK,Design Patterns,Erich Gamma,1433213591758,1433213591758,-1,false,false,000-isbn-000-5
+10,MAGAZINE,Science,American Association for the Advancement of Science (AAAS),1433213591760,1433213591760,-1,false,false

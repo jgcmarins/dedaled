@@ -36,11 +36,15 @@ public class SystemManagement {
 		this.lm.updateLending();
 		this.um.updatePenalties(this.lm.finder.findAllLate());
 		this.run();
+		System.out.print("Updating database... ");
+		this.lm.updateLending();
+		this.um.updatePenalties(this.lm.finder.findAllLate());
+		System.out.print("Closed.\n");
 	}
 
 	public void run() {
 		do {
-			MenuView.menu();
+			MenuView.menu(this.sd.getCurrent().toString());
 		} while(ProcessMenu.process(this));
 	}
 
@@ -78,8 +82,17 @@ public class SystemManagement {
 		} catch(Exception e) { System.out.println(e.getMessage()); }
 	}
 
-	public void returnLibraryEntity(String title) {
-		//TODO
+	public void returnLibraryEntity(Long entityId) {
+		try {
+			LibraryEntity le = this.lm.finder.findById(entityId);
+			try {
+				User u = this.um.finder.findUserByEntityId(entityId);
+				try {
+					this.lm.returnLibraryEntityById(entityId);
+					this.um.returnLibraryEntityById(u.getId(), entityId);
+				} catch(Exception e) { System.out.println(e.getMessage()); }
+			} catch(Exception e) { System.out.println(e.getMessage()); }
+		} catch(Exception e) { System.out.println(e.getMessage()); }
 	}
 
 	public void browseAllLibraryEntities() {
@@ -106,10 +119,12 @@ public class SystemManagement {
 		if(type.equals(LibraryEntity.BOOK)) {
 			System.out.print("Thanks. Tell me book's isbn: ");
 			String isbn = this.keyboard.nextLine();
-			this.lm.insertNewLibraryEntity(new Book(title, author, isbn));
+			this.lm.insertNewLibraryEntity(new Book(title, author, this.sd.getCurrent().getTime(), isbn));
 		}
-		else if(type.equals(LibraryEntity.ARTICLE)) this.lm.insertNewLibraryEntity(new Article(title, author));
-		else if(type.equals(LibraryEntity.MAGAZINE)) this.lm.insertNewLibraryEntity(new Magazine(title, author));
+		else if(type.equals(LibraryEntity.ARTICLE))
+			this.lm.insertNewLibraryEntity(new Article(title, author, this.sd.getCurrent().getTime()));
+		else if(type.equals(LibraryEntity.MAGAZINE))
+			this.lm.insertNewLibraryEntity(new Magazine(title, author, this.sd.getCurrent().getTime()));
 		else System.out.println(type+" is an invalid type!");
 	}
 
@@ -123,5 +138,10 @@ public class SystemManagement {
 				this.um.insertNewUser(new Other(email, password, fullName, this.sd.getCurrent().getTime()));
 			else System.out.println(type+" is an invalid type!");
 		} catch(Exception e) { System.out.println(e.getMessage()); }
+	}
+
+	public void reset() {
+		this.um.clear();
+		this.lm.clear();
 	}
 }

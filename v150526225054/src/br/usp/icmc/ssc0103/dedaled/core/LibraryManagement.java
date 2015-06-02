@@ -66,4 +66,34 @@ public class LibraryManagement {
 			this.ld.updateLibraryEntity(entity);
 		}
 	}
+
+	public void returnLibraryEntityById(Long entityId) throws EntityNotFound {
+		LibraryEntity le = this.finder.findById(entityId);
+		if(le != null) {
+			le.setDevolution(this.sd.getCurrent());
+			le.setLentTo(LibraryEntity.NOTLENT);
+			le.setLent(!LibraryEntity.LENT);
+			le.setLate(!LibraryEntity.LATE);
+			this.ld.updateLibraryEntity(le);
+		} else throw new EntityNotFound();
+	}
+
+	public void clear() {
+		ArrayList<LibraryEntity> entities = this.finder.findAllLibraryEntities();
+		entities.stream()
+			.forEach(entity -> {
+				if(entity.getType().equals(LibraryEntity.BOOK)) {
+					Book book = (Book) entity;
+					entity = new Book(entity.getId(), entity.getTitle(),
+						entity.getAuthor(), this.sd.getCurrent().getTime(), book.getIsbn());
+				}
+				else if(entity.getType().equals(LibraryEntity.ARTICLE))
+					entity = new Article(entity.getId(), entity.getTitle(),
+						entity.getAuthor(), this.sd.getCurrent().getTime());
+				else if(entity.getType().equals(LibraryEntity.MAGAZINE))
+					entity = new Magazine(entity.getId(), entity.getTitle(),
+						entity.getAuthor(), this.sd.getCurrent().getTime());
+				this.ld.updateLibraryEntity(entity);
+			});
+	}
 }

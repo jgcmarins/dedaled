@@ -25,6 +25,10 @@ public class UserFinder {
 		this.ud = ud;
 	}
 
+	public ArrayList<User> findAllUsers() {
+		return this.ud.selectAll();
+	}
+
 	public User findById(Long id) throws UserNotFound {
 		User u = this.ud.selectById(id);
 		if(u == null) throw new UserNotFound();

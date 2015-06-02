@@ -32,13 +32,25 @@ public abstract class LibraryEntity {
 	public static final boolean LENT = true;
 	public static final boolean LATE = true;
 
-	public LibraryEntity(String type, String title, String author) {
+	public LibraryEntity(String type, String title, String author, long curret) {
 		this.id = LibraryEntity.NOID;
 		this.type = type;
 		this.title = title;
 		this.author = author;
-		this.lending = new Date(System.currentTimeMillis());
-		this.devolution = new Date(System.currentTimeMillis());
+		this.lending = new Date(curret);
+		this.devolution = new Date(curret);
+		this.lentTo = LibraryEntity.NOTLENT;
+		this.lent = !LibraryEntity.LENT;
+		this.late = !LibraryEntity.LATE;
+	}
+
+	public LibraryEntity(Long id, String type, String title, String author, long curret) {
+		this.id = id;
+		this.type = type;
+		this.title = title;
+		this.author = author;
+		this.lending = new Date(curret);
+		this.devolution = new Date(curret);
 		this.lentTo = LibraryEntity.NOTLENT;
 		this.lent = !LibraryEntity.LENT;
 		this.late = !LibraryEntity.LATE;

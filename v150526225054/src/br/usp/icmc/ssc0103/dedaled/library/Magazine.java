@@ -13,8 +13,12 @@ import java.util.Date;
 
 public class Magazine extends LibraryEntity {
 
-	public Magazine(String title, String author) {
-		super(LibraryEntity.MAGAZINE, title, author);
+	public Magazine(String title, String author, long current) {
+		super(LibraryEntity.MAGAZINE, title, author, current);
+	}
+
+	public Magazine(Long id, String title, String author, long current) {
+		super(id, LibraryEntity.MAGAZINE, title, author, current);
 	}
 
 	public Magazine(Long id, String title, String author, Date lending, Date devolution,

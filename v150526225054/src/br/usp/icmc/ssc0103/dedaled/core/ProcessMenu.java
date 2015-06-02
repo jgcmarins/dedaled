@@ -37,9 +37,13 @@ public class ProcessMenu {
 					break;
 			case 8: ProcessMenu.lendLibraryEntity(sm);
 					break;
+			case 9: ProcessMenu.returnLibraryEntityById(sm);
+					break;
+			case 666: sm.reset();
+					break;
 			default: return true;
 		}
-		System.out.println("Hit <ENTER> to continue");
+		System.out.println("System time: "+sm.sd.getCurrent().toString()+"\nHit <ENTER> to continue");
 		sm.keyboard.nextLine();
 		sm.keyboard.nextLine();
 		return true;
@@ -76,5 +80,12 @@ public class ProcessMenu {
 		System.out.print("Thanks. Now tell me book's title: ");
 		String title = sm.keyboard.nextLine();
 		sm.lend(email, title);
+	}
+
+	public static void returnLibraryEntityById(SystemManagement sm) {
+		sm.keyboard.nextLine();
+		System.out.print("Ok. Tell me it's id: ");
+		String entityId = sm.keyboard.nextLine();
+		sm.returnLibraryEntity(new Long(Long.parseLong(entityId)));
 	}
 }

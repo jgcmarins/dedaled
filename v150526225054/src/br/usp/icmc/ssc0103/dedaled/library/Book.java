@@ -15,8 +15,13 @@ public class Book extends LibraryEntity {
 
 	private String isbn;
 
-	public Book(String title, String author, String isbn) {
-		super(LibraryEntity.BOOK, title, author);
+	public Book(String title, String author, long current, String isbn) {
+		super(LibraryEntity.BOOK, title, author, current);
+		this.isbn = isbn;
+	}
+
+	public Book(Long id, String title, String author, long current, String isbn) {
+		super(id, LibraryEntity.BOOK, title, author, current);
 		this.isbn = isbn;
 	}
 

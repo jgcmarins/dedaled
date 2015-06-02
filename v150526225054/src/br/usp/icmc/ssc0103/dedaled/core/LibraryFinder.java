@@ -23,6 +23,10 @@ public class LibraryFinder {
 		this.ld = ld;
 	}
 
+	public ArrayList<LibraryEntity> findAllLibraryEntities() {
+		return this.ld.selectAll();
+	}
+
 	public LibraryEntity findById(Long id) throws EntityNotFound {
 		LibraryEntity le = this.ld.selectById(id);
 		if(le == null) throw new EntityNotFound();

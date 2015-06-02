@@ -42,12 +42,12 @@ public class UserManagement {
 		if(user != null) throw new UserAlreadyExists();
 	}
 
-	public boolean userCanLend(Long userId) throws LimitReached, UserNotFound {
+	public boolean userCanLend(Long userId) throws LimitReached, UserNotFound, UserIsPenalized{
 		User u = this.finder.findById(userId);
 		if(u == null) throw new UserNotFound();
 		else  {
 			if(!u.isAtLimit()) {
-				if(!u.isPenalized()) throw new LimitReached(u.getFullName()); // TODO UserIsPenalizedException()
+				if(!u.isPenalized()) throw new UserIsPenalized(u.getFullName());
 				else return true;
 			} else throw new LimitReached(u.getFullName());
 		}
@@ -63,7 +63,7 @@ public class UserManagement {
 
 	public void updatePenalties(ArrayList<LibraryEntity> entities) {
 		this.penalize(entities);
-		this.undoPenalties(entities);
+		this.undoPenalties();
 	}
 
 	public void penalize(ArrayList<LibraryEntity> entities) {
@@ -78,15 +78,39 @@ public class UserManagement {
 		} catch(Exception e) {}
 	}
 
-	public void undoPenalties(ArrayList<LibraryEntity> entities) {
+	public void undoPenalties() {
 		try {
-			Hashtable<User, LibraryEntity> users = this.finder.findAllLate(entities);
-			users.keySet().stream()
+			ArrayList<User> users = this.finder.findAllPenalized();
+			users.stream()
 				.forEach(user -> {
-					LibraryEntity entity = users.get(user);
-					user.undoPenalty(this.sd.getCurrent().getTime(), entity.getId());
-					this.ud.updateUser(user);
+					if(user.undoPenalty(this.sd.getCurrent().getTime()))
+						this.ud.updateUser(user);
 				});
 		} catch(Exception e) {}
+	}
+
+	public void returnLibraryEntityById(Long userId, Long entityId) throws UserNotFound {
+		User u = this.finder.findById(userId);
+		if(u != null) {
+			boolean removed = u.getLendingList().remove(entityId);
+			if(removed) this.ud.updateUser(u);
+		} else throw new UserNotFound();
+	}	
+
+	public void clear() {
+		ArrayList<User> users = this.finder.findAllUsers();
+		users.stream()
+			.forEach(user -> {
+				if(user.getType().equals(User.PROFESSOR))
+					user = new Professor(user.getId(), user.getEmail(), user.getPassword(),
+						user.getFullName(), this.sd.getCurrent().getTime());
+				else if(user.getType().equals(User.STUDENT))
+					user = new Student(user.getId(), user.getEmail(), user.getPassword(),
+						user.getFullName(), this.sd.getCurrent().getTime());
+				else if(user.getType().equals(User.OTHER))
+					user = new Other(user.getId(), user.getEmail(), user.getPassword(),
+						user.getFullName(), this.sd.getCurrent().getTime());
+				this.ud.updateUser(user);
+			});
 	}
 }
