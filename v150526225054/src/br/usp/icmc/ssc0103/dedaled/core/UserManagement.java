@@ -35,9 +35,11 @@ public class UserManagement {
 	}
 
 	public void insertNewUser(User u) throws UserAlreadyExists {
+		User user = null;
 		try {
-			User user = this.finder.findById(u.getId());
+			user = this.finder.findByEmail(u.getEmail());
 		} catch (UserNotFound unf) { this.ud.insertUser(u); }
+		if(user != null) throw new UserAlreadyExists();
 	}
 
 	public boolean userCanLend(Long userId) throws LimitReached, UserNotFound {

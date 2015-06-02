@@ -11,7 +11,7 @@ package br.usp.icmc.ssc0103.dedaled.library.exceptions;
 
 public class EntityNotFound extends Exception {
 
-	private static final String MSG = new String("Entity not found!");
+	private static final String MSG = new String("This item does not exist in our library!");
 
 	public EntityNotFound() {
 		super(EntityNotFound.MSG);

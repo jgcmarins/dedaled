@@ -49,8 +49,9 @@ public class LibraryFinder {
 		return entities;
 	}
 
-	public LibraryEntity findFirstAvailableByTitle(String title) {
+	public LibraryEntity findFirstAvailableByTitle(String title) throws EntityNotFound {
 		LibraryEntity le = this.ld.selectFirstAvailableByTitle(title);
-		return le;
+		if(le == null) throw new EntityNotFound();
+		else return le;
 	}
 }
