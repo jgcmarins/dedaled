@@ -5,4 +5,7 @@ Library management system developed in oriented object programming, for college 
 Name inspired by this software: http://dedalus.usp.br/
 
 # how to use
-java -jar Dedaled.jar
+On directory 'v150526225054/' type:
+
+
+java -jar package/Dedaled.jar year month day
