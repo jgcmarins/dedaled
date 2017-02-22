@@ -1,13 +1,19 @@
 # dedaled
-Library management system developed in oriented object programming, for college purpose.
+Library management system developed for college purpose.
 
 Name inspired by this software: http://dedalus.usp.br/
 
 
 ## how to use
-On directory 'v150526225054/' type:
+### Compile and generate packages
+```
+make
+```
 
-java -jar package/Dedaled.jar year month day
+### Run
+```
+make run
+```
 
-## note:
-'Dedaled.jar' and 'files/' must be in the SAME directory. Do not put 'Dedaled.jar' inside 'files/'. It won't work.
+## License
+[GPL-2.0](/LICENSE)
